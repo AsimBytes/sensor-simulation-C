@@ -6,8 +6,20 @@
 int main() {
 
     FILE *fp = fopen("/home/asim/C-Projects/sensor-sim-project/data/sensor_data.csv", "r");
-    double arr[15]; // Declare static array for now.
-    int index = 0;
+    double num_val;
+    // double arr[15]; // Declare static array for now.
+
+    // Dynamic Memory Allocation declaration
+    double *temp_data;
+    int capacity = 10;
+    int size = 0;
+
+    temp_data = (double*)malloc(capacity * sizeof(double));
+
+    if (temp_data == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(0);
+    }
 
     if (!fp) 
         printf("Cant open file\n");
@@ -23,10 +35,6 @@ int main() {
 
             if (row == 1)
                 continue;
-
-            if (row > 5)
-                break;
-            
             
             // strtok means string tokenizer and strtok splits strings into tokens using delimiters like , in this case.
             char *value = strtok(buffer, ", "); // Returns a pointer to the current token.
@@ -34,10 +42,20 @@ int main() {
             while (value) {
 
                 if (column != 0) {
-                    double num_val = atof(value);
+                    if (size == capacity) {
+                        capacity *= 2;
+                        temp_data = realloc(temp_data, capacity * sizeof(double));
+                    }
 
-                    arr[index] = num_val * 10;
-                    index += 1;
+                    temp_data[size] = atof(value) * 10;
+                    size += 1;
+
+                    printf("Size for each iteration: %d\n", size);
+                    printf("Capacity for each iteration: %d\n", capacity);
+                    printf("And the value is....%s\n", value);
+
+                    // arr[index] = num_val * 10;
+                    // index += 1;
                 }
 
                 value = strtok(NULL, ", "); // This points to the next token. 
@@ -45,8 +63,10 @@ int main() {
             }
         }
 
-        for (int i = 0; i < 15; i++) {
-            printf("%.2f\t", arr[i]);
+        temp_data = realloc(temp_data, size * sizeof(double)); // Reallocate the memory to free up unused space.
+
+        for (int i = 0; i < size; i++) {
+            printf("%.2f\t", temp_data[i]);
         }
 
         printf("\n");
