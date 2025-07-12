@@ -13,6 +13,9 @@ int main() {
     double *temp_data;
     int capacity = 10;
     int size = 0;
+    
+    // For average calculation
+    double sum = 0;
 
     temp_data = (double*)malloc(capacity * sizeof(double));
 
@@ -69,6 +72,25 @@ int main() {
             printf("%.2f\t", temp_data[i]);
         }
 
+        double max = temp_data[0];
+        double min = temp_data[0];
+        sum += temp_data[0];
+
+        for (int i = 1; i < size; i++) {
+            if (temp_data[i] > max)
+                max = temp_data[i];
+
+            if (temp_data[i] < min)
+                min = temp_data[i];
+
+            sum += temp_data[i];
+        }
+
+        double avg = sum / size;
+        
+        printf("\nMaximum Temperature: %.2f\n", max);
+        printf("\nMinimum Temperature: %.2f\n", min);
+        printf("\nAverage Temperature: %.2f\n", avg);
         printf("\n");
 
         fclose(fp);
