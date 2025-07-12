@@ -5,6 +5,9 @@
 #define MIN_VALID_TEMP -10
 #define MAX_VALID_TEMP 59
 
+#define CRITICAL_HIGH_TEMP 50.50
+#define CRITICAL_LOW_TEMP -5.50
+
 
 int main() {
 
@@ -95,6 +98,16 @@ int main() {
         printf("\nMinimum Temperature: %.2f\n", min);
         printf("\nAverage Temperature: %.2f\n", avg);
         printf("\n");
+
+        for (int i = 0; i < size; i++) {
+            if (temp_data[i] > CRITICAL_HIGH_TEMP) {
+                printf("ALERT: High temperature detected at index %d: %.2f\n", i, temp_data[i]);
+            }
+
+            if (temp_data[i] < CRITICAL_LOW_TEMP) {
+                printf("ALERT: Low temperature detected at index %d: %.2f\n", i, temp_data[i]);
+            }
+        }
 
         fclose(fp);
     }
