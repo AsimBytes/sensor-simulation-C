@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define MIN_VALID_TEMP -10
+#define MAX_VALID_TEMP 59
+
 
 int main() {
 
@@ -50,12 +53,12 @@ int main() {
                         temp_data = realloc(temp_data, capacity * sizeof(double));
                     }
 
-                    temp_data[size] = atof(value) * 10;
-                    size += 1;
+                    num_val = atof(value) * 10;
 
-                    printf("Size for each iteration: %d\n", size);
-                    printf("Capacity for each iteration: %d\n", capacity);
-                    printf("And the value is....%s\n", value);
+                    if (num_val >= MIN_VALID_TEMP && num_val <= MAX_VALID_TEMP) {
+                        temp_data[size] = num_val;
+                        size += 1;
+                    }
 
                     // arr[index] = num_val * 10;
                     // index += 1;
