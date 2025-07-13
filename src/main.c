@@ -86,10 +86,14 @@ void simulate_readings(double temp_readings[], int size, double high_temp, doubl
 
         if (*(temp_readings + i) > high_temp) {
             printf("ALERT: High temperature detected at index %d: %.2f\n", i, *(temp_readings + i));
+            printf("\nTurning off heater.....\n");
+            printf("\nTurning on fan.....\n");
         }
 
         if (*(temp_readings + i) < low_temp) {
             printf("ALERT: Low temperature detected at index %d: %.2f\n", i, *(temp_readings + i));
+            printf("\nTurning off fan.....\n");
+            printf("\nTurning on heater.....\n");
         }
 
         sleep(1);
@@ -126,14 +130,42 @@ int main() {
     struct Threshold thres = {-10, 59};
     double *temp_data = NULL;
     const char *file_path = "/home/asim/C-Projects/sensor-sim-project/data/sensor_data.csv";
-    double high_temp;
-    double low_temp;
+    double high_temp = 50.0; // Default high threshold
+    double low_temp = 0.0; // Default low threshold
+    int user_input;
 
     int num_of_readings = read_csv(file_path, &temp_data, thres);
-    get_thresholds(&high_temp, &low_temp);
-    simulate_readings(temp_data, num_of_readings, high_temp, low_temp);
-    compute_stats(temp_data, num_of_readings);
-    free(temp_data);
 
-    return 0;
+    // printf("What do you want to do?\n\n");
+    // printf("1) Change the threshold value.\n2) Simulate live sensor readings.\n3) Compute stats.\n4) Exit.\n");
+    // scanf("%d", &user_input);
+
+    while(1) {
+
+        printf("\n1. Set thresholds\n2. Simulate readings\n3. Compute stats\n4. Exit\n");
+        printf("Choose an option: ");
+        scanf("%d", &user_input);
+
+        switch(user_input) {
+            case 1:
+                get_thresholds(&high_temp, &low_temp);
+                break;
+
+            case 2:
+                simulate_readings(temp_data, num_of_readings, high_temp, low_temp);
+                break;
+
+            case 3:
+                compute_stats(temp_data, num_of_readings);
+                break;
+
+            case 4:
+                printf("Exiting program...\n");
+                free(temp_data);
+                return 0;
+
+            default:
+                printf("Error!!!Incorrect input");
+        }
+    }
 }
