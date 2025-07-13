@@ -8,8 +8,17 @@
 #define CRITICAL_HIGH_TEMP 50.50
 #define CRITICAL_LOW_TEMP -5.50
 
+struct Threshold {
+    int min_valid_temp;
+    int max_valid_temp;
+    double critical_high_temp;
+    double critical_low_temp;
+};
+
 
 int main() {
+
+    struct Threshold thres = {-10, 59, 50.50, -5.50};
 
     FILE *fp = fopen("/home/asim/C-Projects/sensor-sim-project/data/sensor_data.csv", "r");
     double num_val;
@@ -57,7 +66,7 @@ int main() {
 
                     num_val = atof(value) * 10;
 
-                    if (num_val >= MIN_VALID_TEMP && num_val <= MAX_VALID_TEMP) {
+                    if (num_val >= thres.min_valid_temp && num_val <= thres.max_valid_temp) {
                         // temp_data[size] = num_val;
                         *(temp_data + size) = num_val;
                         size += 1;
@@ -100,11 +109,11 @@ int main() {
         printf("\n");
 
         for (int i = 0; i < size; i++) {
-            if (*(temp_data + i) > CRITICAL_HIGH_TEMP) {
+            if (*(temp_data + i) > thres.critical_high_temp) {
                 printf("ALERT: High temperature detected at index %d: %.2f\n", i, *(temp_data + i));
             }
 
-            if (*(temp_data + i) < CRITICAL_LOW_TEMP) {
+            if (*(temp_data + i) < thres.critical_low_temp) {
                 printf("ALERT: Low temperature detected at index %d: %.2f\n", i, *(temp_data + i));
             }
         }
