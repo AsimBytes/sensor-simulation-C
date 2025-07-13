@@ -13,7 +13,6 @@ int main() {
 
     FILE *fp = fopen("/home/asim/C-Projects/sensor-sim-project/data/sensor_data.csv", "r");
     double num_val;
-    // double arr[15]; // Declare static array for now.
 
     // Dynamic Memory Allocation declaration
     double *temp_data;
@@ -59,7 +58,8 @@ int main() {
                     num_val = atof(value) * 10;
 
                     if (num_val >= MIN_VALID_TEMP && num_val <= MAX_VALID_TEMP) {
-                        temp_data[size] = num_val;
+                        // temp_data[size] = num_val;
+                        *(temp_data + size) = num_val;
                         size += 1;
                     }
 
@@ -75,21 +75,21 @@ int main() {
         temp_data = realloc(temp_data, size * sizeof(double)); // Reallocate the memory to free up unused space.
 
         for (int i = 0; i < size; i++) {
-            printf("%.2f\t", temp_data[i]);
+            printf("%.2f\t", *(temp_data + i));
         }
 
-        double max = temp_data[0];
-        double min = temp_data[0];
-        sum += temp_data[0];
+        double max = *temp_data;
+        double min = *temp_data;
+        sum += *temp_data;
 
         for (int i = 1; i < size; i++) {
-            if (temp_data[i] > max)
-                max = temp_data[i];
+            if (*(temp_data + i) > max)
+                max = *(temp_data + i);
 
-            if (temp_data[i] < min)
-                min = temp_data[i];
+            if (*(temp_data + i) < min)
+                min = *(temp_data + i);
 
-            sum += temp_data[i];
+            sum += *(temp_data + i);
         }
 
         double avg = sum / size;
@@ -100,12 +100,12 @@ int main() {
         printf("\n");
 
         for (int i = 0; i < size; i++) {
-            if (temp_data[i] > CRITICAL_HIGH_TEMP) {
-                printf("ALERT: High temperature detected at index %d: %.2f\n", i, temp_data[i]);
+            if (*(temp_data + i) > CRITICAL_HIGH_TEMP) {
+                printf("ALERT: High temperature detected at index %d: %.2f\n", i, *(temp_data + i));
             }
 
-            if (temp_data[i] < CRITICAL_LOW_TEMP) {
-                printf("ALERT: Low temperature detected at index %d: %.2f\n", i, temp_data[i]);
+            if (*(temp_data + i) < CRITICAL_LOW_TEMP) {
+                printf("ALERT: Low temperature detected at index %d: %.2f\n", i, *(temp_data + i));
             }
         }
 
